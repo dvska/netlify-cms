@@ -79,7 +79,6 @@ async function getConfig(file, isPreloaded) {
   if (!isYaml) {
     console.log(`Response for ${ file } was not yaml. (Content-Type: ${ contentType })`);
     if (isPreloaded) return parseConfig('');
-    throw new Error('Failed to load configuration.');
   }
   return parseConfig(await response.text());
 }
