@@ -2,6 +2,7 @@ import { attempt, isError } from 'lodash';
 import { resolveFormat } from "Formats/formats";
 import { selectIntegration } from 'Reducers/integrations';
 import {
+  selectIdentifier,
   selectListMethod,
   selectEntrySlug,
   selectEntryPath,
@@ -43,18 +44,12 @@ class LocalStorageAuthStore {
 
 const slugFormatter = (template = "{{slug}}", entryData) => {
   const date = new Date();
+  const getIdentifier = (entryData) => {	
+    const identifier = selectIdentifier(entryData.keys());
 
-  const getIdentifier = (entryData) => {
-    const validIdentifierFields = ["title", "path"];
-    const identifiers = validIdentifierFields.map((field) =>
-      entryData.find((_, key) => key.toLowerCase().trim() === field)
-    );
-
-    const identifier = identifiers.find(ident => ident !== undefined);
-
-    if (identifier === undefined) {
-      throw new Error(`Collection must have a field name that is a valid entry identifier. Please add one of these fields: ${ validIdentifierFields }`);
-    }
+    if (identifier === undefined) {	
+      throw new Error("Collection must have a field name that is a valid entry identifier");	
+    }	
 
     return identifier;
   };
